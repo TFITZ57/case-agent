@@ -163,8 +163,7 @@ class State:
     case_data: CaseData = field(default_factory=lambda: CaseData.model_validate({}))
     user_data: UserData = field(default_factory=lambda: UserData.model_validate({}))
     messages: Annotated[list[AnyMessage], add_messages] = field(default_factory=list)
-    feedback: str = Field(default="")
 
 __all__ = [
     "State"
-]
+    ]

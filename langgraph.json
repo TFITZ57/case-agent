@@ -1,5 +1,7 @@
 {
-  "dockerfile_lines": [],
+  "dockerfile_lines": [
+    "RUN apt-get update && apt-get install -y tesseract-ocr"
+  ],
   "graphs": {
     "agent": "assistant.graph:assistant"
   },

@@ -4,6 +4,7 @@ from langchain_core.runnables import RunnableConfig
 from assistant.configuration import FireStore, Memory, store
 from assistant import configuration
 from langgraph.graph import END, StateGraph
+from assistant.tools import process_files, update_case, update_user
 from trustcall import create_extractor
 from langchain_core.tools import tool
 from pydantic import BaseModel
@@ -31,12 +32,18 @@ TOOLS = [
 
 async def case_manager(state: State, store: FireStore = store) -> dict:
     """Manages the case intake interview process."""
-    existing_data = {
-        "case_data": json.dumps(state.case_data.model_dump(), indent=2)
-    }
+    namespace = ("case_data", CASE_ID)
+    if existing_data := store.get(*namespace):
+        existing_data = {
+            "case_data": existing_data
+        }
+    else:
+        existing_data = {
+            "case_data": CaseData.model_validate({})
+        }
 
     case_manager_prompt = CONFIG.case_manager_prompt.format(
-        data_schema=get_schema_json(state.case_data),
+        data_schema=get_schema_json(CaseData),
         existing_data=existing_data
     )
     filtered_messages = [
