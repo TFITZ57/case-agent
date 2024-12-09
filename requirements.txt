@@ -1,0 +1,6 @@
+langgraph
+langchain_anthropic
+tavily-python
+langchain_community
+python-dotenv
+langsmith>=0.0.69 
